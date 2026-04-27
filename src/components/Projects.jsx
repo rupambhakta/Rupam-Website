@@ -37,6 +37,15 @@ const PROJECTS = [
     category: 'automation',
     demo: 'LeadPipeDemo',
   },
+  {
+    id: 'resume-bot',
+    tag: 'AGENTIC AI · HUGGING FACE',
+    title: 'Rupam AI Twin',
+    desc: 'A personal resume chatbot trained on my bio, projects, and stack. Hosted as a Gradio Space on Hugging Face — ask it anything about me.',
+    stack: ['Hugging Face', 'Gradio', 'LLM', 'Python'],
+    category: 'ai',
+    demo: 'ResumeBotDemo',
+  },
 ];
 
 function NexTalkDemo() {
@@ -260,7 +269,18 @@ function LeadPipeDemo() {
   );
 }
 
-const DEMOS = { NexTalkDemo, EventureDemo, OpsAgentDemo, LeadPipeDemo };
+function ResumeBotDemo() {
+  return (
+    <iframe
+      src="https://rohanday28-rupam-personal-resume.hf.space"
+      title="Rupam AI Twin · Hugging Face Space"
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0, background: '#050505', display: 'block' }}
+      allow="clipboard-read; clipboard-write"
+    />
+  );
+}
+
+const DEMOS = { NexTalkDemo, EventureDemo, OpsAgentDemo, LeadPipeDemo, ResumeBotDemo };
 
 function ProjectPreview({ id }) {
   if (id === 'nextalk') return (
@@ -286,6 +306,17 @@ function ProjectPreview({ id }) {
       <div style={{paddingLeft:12,color:'#f5f5f5'}}>found 3 related docs</div>
       <div style={{color:'#00ff88'}}>{'>'} slack.post(#oncall)</div>
       <div style={{color:'#00ff88',marginTop:4}}>✓ resolved in 4.2s</div>
+    </div>
+  );
+  if (id === 'resume-bot') return (
+    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at 70% 50%, rgba(0,255,136,.08), transparent 60%)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, width: 220 }}>
+        <div style={{ alignSelf: 'flex-end', padding: '8px 12px', background: '#00ff88', color: '#000', borderRadius: 12, borderBottomRightRadius: 2, fontSize: 13, fontWeight: 600 }}>tell me about Rupam</div>
+        <div style={{ alignSelf: 'flex-start', padding: '8px 12px', background: '#0f0f10', border: '1px solid #1a1a1c', borderRadius: 12, borderBottomLeftRadius: 2, fontSize: 13, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ width: 18, height: 18, borderRadius: '50%', background: '#00ff88', color: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700 }}>R</div>
+          full-stack + AI engineer, MERN…
+        </div>
+      </div>
     </div>
   );
   if (id === 'auto-pipe') return (

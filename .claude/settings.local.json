@@ -6,7 +6,8 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173/src/main.jsx)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173/src/App.jsx)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173/src/index.css)",
-      "Bash(curl -s http://localhost:5173/src/App.jsx)"
+      "Bash(curl -s http://localhost:5173/src/App.jsx)",
+      "Bash(npm install *)"
     ]
   }
 }

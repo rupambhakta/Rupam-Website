@@ -1,14 +1,27 @@
 import React from 'react';
 
-const SYSTEM = `You are an AI assistant representing Rupam Bhakta, a Full-Stack Developer & AI/Automation Engineer at Micronix System in Kolkata, India. Reply in first person AS Rupam, but warmly and concisely (max 3 short sentences). Key facts:
-- Stack: MERN (MongoDB, Express, React, Node), Next.js, Tailwind, JavaScript/Java
-- Specialties: agentic AI systems, n8n workflow automation, real-time apps
-- Notable projects: NexTalk (real-time chat with Socket.IO + JWT), Eventure (Next.js + Strapi event/QR platform)
-- Education: B.Tech CSE, Calcutta Institute of Technology, 2025, CGPA 8.2
-- Past: ASP OL Media (email infra, DNS/SMTP, Mar-Jul 2025)
-- Contact: rupambhakta2020@gmail.com, +91 91442 68665, github.com/rupambhakta
-- Available for freelance / full-time / interesting AI experiments.
-If asked for contact, politely point them to the contact section. Stay on topic — politely deflect off-topic asks.`;
+const HF_SPACE = 'rohanday28/rupam_personal_resume';
+
+let clientPromise = null;
+function getClient() {
+  if (!clientPromise) {
+    clientPromise = import('@gradio/client').then(({ Client }) => Client.connect(HF_SPACE));
+  }
+  return clientPromise;
+}
+
+function extractText(data) {
+  if (data == null) return '';
+  if (typeof data === 'string') return data;
+  if (Array.isArray(data)) return data.map(extractText).filter(Boolean).join('\n');
+  if (typeof data === 'object') {
+    if (typeof data.response === 'string') return data.response;
+    if (typeof data.text === 'string') return data.text;
+    if (typeof data.message === 'string') return data.message;
+    return JSON.stringify(data);
+  }
+  return String(data);
+}
 
 export default function AIBot() {
   const [open, setOpen] = React.useState(false);
@@ -31,11 +44,12 @@ export default function AIBot() {
     setMsgs(m => [...m, { who: 'user', text: q }]);
     setPending(true);
     try {
-      const reply = await window.claude?.complete?.({
-        messages: [{ role: 'user', content: `${SYSTEM}\n\nUser: ${q}\n\nRupam:` }],
-      });
-      setMsgs(m => [...m, { who: 'bot', text: (reply || '').trim() || "I'm not sure how to answer that — try emailing rupambhakta2020@gmail.com." }]);
-    } catch {
+      const client = await getClient();
+      const result = await client.predict('/chat', { message: q });
+      const reply = extractText(result?.data).trim();
+      setMsgs(m => [...m, { who: 'bot', text: reply || "I'm not sure how to answer that — try emailing rupambhakta2020@gmail.com." }]);
+    } catch (err) {
+      console.error('Gradio call failed', err);
       setMsgs(m => [...m, { who: 'bot', text: "Sorry, I'm offline right now. Email me at rupambhakta2020@gmail.com." }]);
     } finally {
       setPending(false);
